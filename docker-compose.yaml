@@ -1,0 +1,37 @@
+version: "3.8"
+
+services: 
+  server:
+    build: 
+      context: .
+      dockerfile: dockerfiles/nginx.dev.dockerfile
+    ports: 
+      - '8201:80'
+    volumes: 
+      - ./htdocs:/var/www/dolibarr/htdocs
+      - ./dockerfiles/conf/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./data/documents:/var/www/dolibarr/documents
+    #env_file:
+    #  - ./env/.dev.env
+    depends_on: 
+      - php
+      - postgres
+  php:
+    build: 
+      context: .
+      dockerfile: dockerfiles/php.dev.dockerfile
+    volumes:
+      - ./htdocs:/var/www/dolibarr/htdocs:delegated
+  postgres:
+    image: 'postgres:15.3'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: dolibar
+    volumes:
+      - postgresdata:/var/lib/postgresql/data/      
+     
+volumes:
+  postgresdata:
