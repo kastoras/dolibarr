@@ -1,0 +1,33 @@
+version: "3.8"
+
+services: 
+  server:
+    image: kastoras/dolibar-server:v17.0
+    ports: 
+      - '8201:80'
+    depends_on: 
+      - php
+      - mariadb
+    #environment:
+    #  - DOLIBARR_MAIN_URL_ROOT
+    #  - DOLIBARR_MAIN_DOCUMENT_ROOT
+    #  - DOLIBARR_MAIN_DATA_ROOT
+    #  - DOLIBARR_MAIN_DB_HOST
+    #  - DOLIBARR_MAIN_DB_PORT
+    #  - DOLIBARR_MAIN_DB_NAME
+    #  - DOLIBARR_MAIN_DB_USER
+    #  - DOLIBARR_MAIN_DB_PASS
+    #  - DOLIBARR_MAIN_DB_TYPE mysqli|pgsql
+  php:
+    image: kastoras/dolibar-php:v17.0
+  mariadb:
+    image: mariadb:10.11.1-rc-jammy
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306          
+    volumes:
+      - mariadbdata:/var/lib/mysql         
+     
+volumes:
+  mariadbdata:

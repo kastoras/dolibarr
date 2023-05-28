@@ -23,4 +23,10 @@ RUN docker-php-ext-install intl &&\
 
 RUN docker-php-ext-enable pdo_mysql pdo_pgsql
 
-RUN chown -R www-data:www-data /var/www/dolibarr    
+RUN mkdir /var/www/dolibarr/documents
+
+COPY htdocs .
+
+RUN chown -R 1000:1000 /var/www/dolibarr    
+
+USER 1000
