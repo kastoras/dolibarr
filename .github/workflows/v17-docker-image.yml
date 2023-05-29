@@ -9,23 +9,17 @@ jobs:
     steps:    
     - uses: actions/checkout@v3
     
-    - name: Get docker files
-      uses: actions/checkout@v3
-      with:
-        repository: kastoras/dolibar-dockerfiles
-        path: .
+    - name: Clone code from other repository
+      run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
+
+    - name: Move Docker Files in root folder
+      run: mv dolibar-dockerfiles/* .
         
     - name: Check current directory
       run: pwd
     
     - name: List current directory
       run: ls -al . 
-
-    - name: List prev prev directory
-      run: ls -al ../
-
-    - name: List prev directory
-      run: ls -al ../../
       
     - name: Build the Dolibarr Nginx Image
       run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:$(date +%s)
