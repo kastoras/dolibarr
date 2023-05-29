@@ -2,9 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+    branches: [ "v17" ]
 
 jobs:
 
@@ -13,6 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout Code
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    
+    - name: Get docker files
+    - uses: actions/checkout@v3
+      with:
+        repository: kastoras/dolibar-dockerfiles
+        path: .
+
+    - name: Build the Dolibarr Nginx Image
+      run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:$(date +%s)
+ 
+    - name: Log to Docker Hub
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push image to docker hub
+      run: docker image push kastoras/dolibarr-nginx:$(date +%s)
