@@ -14,7 +14,7 @@ jobs:
         path: .
         
     - name: Check current directory
-      run: ls -al .
+      run: ls -al ../
       
     - name: Build the Dolibarr Nginx Image
       run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:$(date +%s)
