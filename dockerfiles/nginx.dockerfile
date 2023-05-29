@@ -8,4 +8,4 @@ RUN mv nginx.conf default.conf
 
 WORKDIR /var/www/dolibarr/htdocs
 
-COPY htdocs .
+ADD htdocs .

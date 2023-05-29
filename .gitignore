@@ -58,3 +58,5 @@ package-lock.json
 
 doc/install.lock
 /.asciidoctorconfig.adoc
+
+docker-compose.withenv.yaml

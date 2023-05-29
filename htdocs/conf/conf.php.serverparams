@@ -39,10 +39,7 @@ if(isset($_SERVER['DOLIBARR_MAIN_URL_ROOT']))
 // $dolibarr_main_document_root='/var/www/dolibarr/htdocs';
 // $dolibarr_main_document_root='C:/My web sites/dolibarr/htdocs';
 //
-$dolibarr_main_document_root='';
-if(isset($_SERVER['DOLIBARR_MAIN_DOCUMENT_ROOT']))
-    $dolibarr_main_document_root=$_SERVER['DOLIBARR_MAIN_DOCUMENT_ROOT'];
-
+$dolibarr_main_document_root='/var/www/dolibarr/htdocs';
 
 // dolibarr_main_url_root_alt
 // ==========================
