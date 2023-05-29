@@ -3,6 +3,8 @@ name: Docker Image CI
 on:
   push:
     branches: [ "v17" ]
+  pull_request:
+    branches: [ "v17" ]
 
 jobs:
   build:
