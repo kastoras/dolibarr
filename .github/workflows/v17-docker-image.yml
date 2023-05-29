@@ -6,16 +6,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
-    
+    steps:    
     - name: Get docker files
       uses: actions/checkout@v3
       with:
         repository: kastoras/dolibar-dockerfiles
         path: .
-
+        
+    - name: Check current directory
+      run: ls -al .
+      
     - name: Build the Dolibarr Nginx Image
       run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:$(date +%s)
  
