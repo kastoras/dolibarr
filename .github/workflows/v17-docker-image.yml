@@ -8,6 +8,12 @@ jobs:
 
     steps:    
     - uses: actions/checkout@v3
+
+    - name: Get last release tag
+      id: get_latest_tag
+      run: |
+        LATEST_TAG=$(git describe --abbrev=0 --tags)
+        echo "::set-output name=latest_tag::$LATEST_TAG"    
     
     - name: Clone code from other repository
       run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
@@ -17,12 +23,6 @@ jobs:
       
     - name: Remove Docker Files folder
       run: rm -rf dolibar-dockerfiles
-
-    - name: Get last tag
-      id: get_latest_tag
-      run: |
-        LATEST_TAG=$(git describe --abbrev=0 --tags)
-        echo "::set-output name=latest_tag::$LATEST_TAG"
 
     - name: Build the Dolibarr Nginx Image Using last tag
       run: |
