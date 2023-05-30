@@ -18,22 +18,16 @@ jobs:
     - name: Remove Docker Files folder
       run: rm -rf dolibar-dockerfiles
 
-    - name: Checkout original repo to get latest tag
-      uses: actions/checkout@v2
-      with:
-        repository: Dolibarr/dolibarr
-        ref: "17.0"
-
     - name: Get last tag
-      id: get_last_tag
+      id: get_latest_tag
       run: |
-        LAST_TAG=$(cd dolibarr && git describe --abbrev=0 --tags)
-        echo "::set-output name=last_tag::$LAST_TAG"    
+        LATEST_TAG=$(git describe --abbrev=0 --tags)
+        echo "::set-output name=latest_tag::$LATEST_TAG"
 
     - name: Build the Dolibarr Nginx Image Using last tag
       run: |
-        LAST_TAG="${{ steps.get_last_tag.outputs.last_tag }}"
-        docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:$LAST_TAG
+        LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+        docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:$LATEST_TAG
         
     #- name: Build the Dolibarr Nginx Image
     #  run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:latest
@@ -46,5 +40,5 @@ jobs:
 
     - name: Push image to docker hub
       run: |
-        LAST_TAG="${{ steps.get_last_tag.outputs.last_tag }}"
-        docker image push kastoras/dolibarr-nginx:$LAST_TAG
+        LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+        docker image push kastoras/dolibarr-nginx:$LATEST_TAG
