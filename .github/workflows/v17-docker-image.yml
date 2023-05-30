@@ -24,6 +24,12 @@ jobs:
         repository: Dolibarr/dolibarr
         ref: "17.0"
 
+    - name: Checkl current folder
+      run: |
+        ls -al .
+        ls -al ../
+        pwd
+
     - name: Get last tag
       id: get_last_tag
       run: |
