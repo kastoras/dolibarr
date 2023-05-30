@@ -13,7 +13,7 @@ jobs:
       id: get_latest_tag
       run: |
         LATEST_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags --merged v17 | head -n 1)   
-        echo "::set-output name=latest_tag::$LATEST_TAG"
+        echo "latest_tag=$LATEST_TAG" >> "$GITHUB_ENV"
     
     - name: Clone code from other repository
       run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
@@ -25,9 +25,7 @@ jobs:
       run: rm -rf dolibar-dockerfiles
 
     - name: Build the Dolibarr Nginx Image Using last tag
-      run: |
-        LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
-        docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"$LATEST_TAG"
+      run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"${{ env.latest_tag }}"
         
     #- name: Build the Dolibarr Nginx Image
     #  run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:latest
@@ -39,6 +37,4 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push image to docker hub
-      run: |
-        LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
-        docker image push kastoras/dolibarr-nginx:"$LATEST_TAG"
+      run: docker image push kastoras/dolibarr-nginx:"${{ env.latest_tag }}"
