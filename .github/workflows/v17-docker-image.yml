@@ -14,6 +14,7 @@ jobs:
       run: |
         LATEST_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags --merged v17 | head -n 1)   
         echo "latest_tag=$LATEST_TAG" >> "$GITHUB_ENV"
+        echo "$LATEST_TAG"
     
     - name: Clone code from other repository
       run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
