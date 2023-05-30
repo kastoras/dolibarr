@@ -6,44 +6,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:    
+    steps:
     - uses: actions/checkout@v3
 
     - name: Get last release tag
       id: get_latest_tag
       run: |
-        echo "LATESTTAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags --merged v17 | head -n 1)" >> "$GITHUB_ENV"
-        echo $LATESTTAG
-        echo "$LATESTTAG"
+        echo "LATEST_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags --merged v17 | head -n 1)" >> "$GITHUB_ENV"
 
-    - name: Print latest tag
-      id: print_latest_tag
-      run: |
-        echo ${{ env.LATESTTAG }}        
-    
     - name: Clone code from other repository
       run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
 
     - name: Move Docker Files in root folder
       run: mv dolibar-dockerfiles/* .
-      
+
     - name: Remove Docker Files folder
       run: rm -rf dolibar-dockerfiles
 
     - name: Build the Dolibarr Nginx Image Using last tag
       id: build_dolibarr_image
-      run: | 
-        echo "${{ env.LATESTTAG }}"
-        docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"${{ env.LATESTTAG }}"
-        
+      run: |
+        echo "${{ env.LATEST_TAG }}"
+        docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"${{ env.LATEST_TAG }}"
+
     #- name: Build the Dolibarr Nginx Image
     #  run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:latest
- 
-    - name: Log to Docker Hub
+
+    - name: Log in to Docker Hub
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push image to docker hub
-      run: docker image push kastoras/dolibarr-nginx:"${{ env.LATESTTAG }}"
+    - name: Push image to Docker Hub
+      run: docker image push kastoras/dolibarr-nginx:"${{ env.LATEST_TAG }}"
