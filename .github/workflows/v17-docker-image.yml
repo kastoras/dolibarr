@@ -27,7 +27,7 @@ jobs:
     - name: Get last tag
       id: get_last_tag
       run: |
-        cd original-repo
+        cd dolibarr
         LAST_TAG=$(git describe --abbrev=0 --tags)
         echo "::set-output name=last_tag::$LAST_TAG"        
 
