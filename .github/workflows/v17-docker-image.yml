@@ -12,7 +12,7 @@ jobs:
     - name: Set the value
       id: step_one
       run: |
-          echo "FOO=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+          echo "FOO=$(git describe --tag --abbrev=0 | cut -c 2-)" >> $GITHUB_ENV
     - name: Use the value
       id: step_two
       run: |
