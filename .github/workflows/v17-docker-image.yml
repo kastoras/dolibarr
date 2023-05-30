@@ -25,7 +25,9 @@ jobs:
       run: rm -rf dolibar-dockerfiles
 
     - name: Build the Dolibarr Nginx Image Using last tag
-      run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"${{ env.latest_tag }}"
+      run: | 
+        echo "${{ env.latest_tag }}"
+        docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"${{ env.latest_tag }}"
         
     #- name: Build the Dolibarr Nginx Image
     #  run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:latest
