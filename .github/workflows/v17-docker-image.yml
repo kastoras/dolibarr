@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        ref: 'v17'
+        ref: v17
 
     - name: Set the value
       id: step_one
