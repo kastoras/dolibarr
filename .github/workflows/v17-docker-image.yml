@@ -9,13 +9,20 @@ jobs:
     steps:    
     - uses: actions/checkout@v3
 
+    - name: Set the value
+      id: step_one
+      run: |
+        echo "action_state=yellow" >> "$GITHUB_ENV"
+    - name: Use the value
+      id: step_two
+      run: |
+        echo "${{ env.action_state }}" # This will output 'yellow'    
+
     - name: Get last release tag
       id: get_latest_tag
       run: |
         LATEST_TAG=$(git tag --sort=-v:refname | head -n 1 || echo "v0.0.0")
         echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
-        echo $LATEST_TAG
-        echo "${{ env.latest_tag }}"
     
     - name: Clone code from other repository
       run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
