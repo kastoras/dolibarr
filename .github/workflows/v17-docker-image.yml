@@ -12,9 +12,7 @@ jobs:
     - name: Set the value
       id: step_one
       run: |
-          status=$(git status)
-          cleaned_status=$(echo "$status" | sed "s/'//g")
-          echo "FOO=$cleaned_status" >> $GITHUB_ENV
+          echo "FOO=$(git --version)" >> $GITHUB_ENV
     - name: Use the value
       id: step_two
       run: |
