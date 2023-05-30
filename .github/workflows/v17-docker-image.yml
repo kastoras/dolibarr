@@ -9,12 +9,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    steps:
-      - name: Set the value
-        id: step_one
-        run: |
-            echo "FOO=$(git status)" >> $GITHUB_ENV
-      - name: Use the value
-        id: step_two
-        run: |
-            echo "${{ env.FOO }}"
+    - name: Set the value
+      id: step_one
+      run: |
+          echo "FOO=$(git status)" >> $GITHUB_ENV
+    - name: Use the value
+      id: step_two
+      run: |
+          echo "${{ env.FOO }}"
