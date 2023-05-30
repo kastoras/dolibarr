@@ -1,40 +1,20 @@
 name: Docker Image CI
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Get last release tag
-        id: get_latest_tag
+    steps:
+      - name: Set the value
+        id: step_one
         run: |
-          echo "::set-output name=LATEST_TAG::$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags --merged v17 | head -n 1)"
-
-      - name: Clone code from other repository
-        run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
-
-      - name: Move Docker Files in root folder
-        run: mv dolibar-dockerfiles/* .
-
-      - name: Remove Docker Files folder
-        run: rm -rf dolibar-dockerfiles
-
-      - name: Build the Dolibarr Nginx Image Using last tag
+            echo "FOO=$(git status)" >> $GITHUB_ENV
+      - name: Use the value
+        id: step_two
         run: |
-          echo "${{ steps.get_latest_tag.outputs.LATEST_TAG }}"
-          docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:"${{ steps.get_latest_tag.outputs.LATEST_TAG }}"
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Push image to Docker Hub
-        run: docker image push kastoras/dolibarr-nginx:"${{ steps.get_latest_tag.outputs.LATEST_TAG }}" 
+            echo "${{ env.FOO }}"
