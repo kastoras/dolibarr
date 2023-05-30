@@ -27,7 +27,7 @@ jobs:
     - name: Get last tag
       id: get_last_tag
       run: |
-        LAST_TAG=$(cd original-repo && git describe --abbrev=0 --tags)
+        LAST_TAG=$(cd dolibarr && git describe --abbrev=0 --tags)
         echo "::set-output name=last_tag::$LAST_TAG"    
 
     - name: Build the Dolibarr Nginx Image Using last tag
