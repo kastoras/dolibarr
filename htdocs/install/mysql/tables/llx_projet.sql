@@ -20,12 +20,14 @@
 create table llx_projet
 (
   rowid            	integer AUTO_INCREMENT PRIMARY KEY,
+  fk_project        integer DEFAULT NULL,       -- parent project rowid
   fk_soc           	integer,
   datec            	datetime,					-- date creation project
   tms              	timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   dateo            	date,						-- date start project
   datee            	date,						-- date end project
-  ref              	varchar(50),
+  ref              	varchar(50),				-- reference number
+  ref_ext          	varchar(50),				-- reference into an external system (not used by dolibarr)
   entity           	integer DEFAULT 1 NOT NULL,	-- multi company id
   title            	varchar(255) NOT NULL,
   description      	text,
@@ -36,7 +38,7 @@ create table llx_projet
   fk_opp_status    	integer DEFAULT NULL,	        -- if project is used to manage opportunities
   opp_percent	   	double(5,2),
   fk_opp_status_end	integer DEFAULT NULL,	        -- if project is used to manage opportunities (the opportunity status the project has when set to lose)
-  date_close       	datetime DEFAULT NULL,    
+  date_close       	datetime DEFAULT NULL,
   fk_user_close    	integer DEFAULT NULL,
   note_private     	text,
   note_public      	text,

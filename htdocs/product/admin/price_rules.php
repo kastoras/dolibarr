@@ -30,7 +30,7 @@ $langs->loadLangs(array('admin', 'products'));
 $action = GETPOST('action', 'aZ09');
 
 // Security check
-if (!$user->admin || (empty($conf->product->enabled) && empty($conf->service->enabled))) {
+if (!$user->admin || (!isModEnabled("product") && !isModEnabled("service"))) {
 	accessforbidden();
 }
 
@@ -119,10 +119,10 @@ while ($result = $db->fetch_object($query)) {
 $title = $langs->trans('ProductServiceSetup');
 $tab = $langs->trans("ProductsAndServices");
 
-if (empty($conf->product->enabled)) {
+if (!isModEnabled("product")) {
 	$title = $langs->trans('ServiceSetup');
 	$tab = $langs->trans('Services');
-} elseif (empty($conf->service->enabled)) {
+} elseif (!isModEnabled("service")) {
 	$title = $langs->trans('ProductSetup');
 	$tab = $langs->trans('Products');
 }
@@ -167,7 +167,7 @@ for ($i = 1; $i <= $conf->global->PRODUIT_MULTIPRICES_LIMIT; $i++) {
 					// Label of price
 					$keyforlabel = 'PRODUIT_MULTIPRICES_LABEL'.$i;
 				if (!empty($conf->global->$keyforlabel)) {
-					print ' - '.$langs->trans($conf->global->$keyforlabel);
+					print ' - '.$langs->trans(getDolGlobalString($keyforlabel));
 				}
 				?>
 					</td>
