@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Create Dolibarr Docker Image CI Version 19
 
 on: workflow_dispatch
 
@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:    
-    - name: Checkout Version 17 Branch
+    - name: Checkout Version 19 Branch
       uses: actions/checkout@v3
       with:
-          path: v17
+          path: v19
     
     - name: Clone code from other repository
       run: git clone --depth 1 --branch main https://github.com/kastoras/dolibar-dockerfiles.git
