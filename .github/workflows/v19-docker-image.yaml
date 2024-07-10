@@ -17,6 +17,9 @@ jobs:
 
     - name: Move Docker Files in root folder
       run: mv dolibar-dockerfiles/* .
+
+    - name: Move Dolibarr source code to root
+      run: mv v19/htdocs .      
         
     - name: List current directory
       run: ls -al . 
