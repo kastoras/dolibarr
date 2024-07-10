@@ -13,6 +13,9 @@ services:
     depends_on: 
       - php
       - mariadb
+    networks:
+      - proxy   
+      - default
   php:
     build: 
       context: .
@@ -20,6 +23,8 @@ services:
     volumes:
       - ./htdocs:/var/www/dolibarr/htdocs:delegated
       - dolidevdocuments:/var/www/dolibarr/documents:delegated
+    networks:
+      - default
   mariadb:
     image: mariadb:10.11.1-rc-jammy
     environment:
@@ -28,7 +33,13 @@ services:
       - 3306:3306          
     volumes:
       - dbdata:/var/lib/mysql         
-     
+    networks:
+      - default 
+networks:
+  proxy:
+    external: true
+  default:
+
 volumes:
   dbdata:
   dolidevdocuments:
