@@ -23,12 +23,15 @@ jobs:
         
     - name: List current directory
       run: ls -al . 
+
+    - name: Create tag version
+      run: echo "IMAGE_TAG=v19.$(date +%s)" >> $GITHUB_ENV
       
     - name: Build the Dolibarr Nginx Image
-      run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:v19.$(date +%s)
+      run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:${{ env.IMAGE_TAG }}
 
     - name: Build the Dolibarr PHP Image
-      run: docker build . --file ./dockerfiles/php8.2.withenv.dockerfile --tag kastoras/dolibarr-php:v19.$(date +%s)      
+      run: docker build . --file ./dockerfiles/php8.2.withenv.dockerfile --tag kastoras/dolibarr-php:${{ env.IMAGE_TAG }}
  
     - name: Log to Docker Hub
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -36,5 +39,7 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push image to docker hub
-      run: docker image push kastoras/dolibarr-nginx:$(date +%s)
+    - name: Push images to docker hub
+      run: |
+        docker image push kastoras/dolibarr-nginx:${{ env.IMAGE_TAG }}
+        docker image push kastoras/dolibarr-php:${{ env.IMAGE_TAG }}
