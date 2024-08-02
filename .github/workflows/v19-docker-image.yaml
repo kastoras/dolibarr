@@ -20,18 +20,32 @@ jobs:
 
     - name: Move Dolibarr source code to root
       run: mv v19/htdocs .      
-        
-    - name: List current directory
-      run: ls -al . 
 
-    - name: Create tag version
-      run: echo "IMAGE_TAG=v19.$(date +%s)" >> $GITHUB_ENV
+    - name: Create multisite tag version
+      run: echo "IMAGE_MULTISITE_TAG=v19-multisite" >> $GITHUB_ENV
+
+    - name: Create simplesite tag version
+      run: echo "IMAGE_TAG=v19" >> $GITHUB_ENV      
       
-    - name: Build the Dolibarr Nginx Image
+    - name: Build the Dolibarr Singlesite Nginx Image
       run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:${{ env.IMAGE_TAG }}
 
-    - name: Build the Dolibarr PHP Image
+    - name: Build the Dolibarr Singlesite PHP Image
       run: docker build . --file ./dockerfiles/php8.2.withenv.dockerfile --tag kastoras/dolibarr-php:${{ env.IMAGE_TAG }}
+
+    - name: Checkout develop branch for conf.php.serverparams
+      run: |
+        git fetch origin develop
+        git checkout origin/develop -- htdocs/conf/conf.php.serverparams
+
+    - name: Rename conf.php.serverparams to conf.php
+      run: mv htdocs/conf/conf.php.serverparams htdocs/conf/conf.php    
+    
+    - name: Build the Dolibarr multisite Nginx Image
+      run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:${{ env.IMAGE_MULTISITE_TAG }}
+
+    - name: Build the Dolibarr multisite PHP Image
+      run: docker build . --file ./dockerfiles/php8.2.withenv.dockerfile --tag kastoras/dolibarr-php:${{ env.IMAGE_MULTISITE_TAG }}      
  
     - name: Log to Docker Hub
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -43,3 +57,5 @@ jobs:
       run: |
         docker image push kastoras/dolibarr-nginx:${{ env.IMAGE_TAG }}
         docker image push kastoras/dolibarr-php:${{ env.IMAGE_TAG }}
+        docker image push kastoras/dolibarr-nginx:${{ env.IMAGE_MULTISITE_TAG }}
+        docker image push kastoras/dolibarr-php:${{ env.IMAGE_MULTISITE_TAG }}        
