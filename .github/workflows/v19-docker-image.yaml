@@ -35,11 +35,10 @@ jobs:
 
     - name: Checkout develop branch for conf.php.serverparams
       run: |
+        cd v19
         git fetch origin develop
         git checkout origin/develop -- htdocs/conf/conf.php.serverparams
-
-    - name: Rename conf.php.serverparams to conf.php
-      run: mv htdocs/conf/conf.php.serverparams htdocs/conf/conf.php    
+        mv htdocs/conf/conf.php.serverparams ../htdocs/conf/conf.php
     
     - name: Build the Dolibarr multisite Nginx Image
       run: docker build . --file ./dockerfiles/nginx.dockerfile --tag kastoras/dolibarr-nginx:${{ env.IMAGE_MULTISITE_TAG }}
