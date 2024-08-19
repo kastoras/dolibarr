@@ -130,8 +130,9 @@ $dolibarr_main_db_user=$_SERVER['HTTP_X_DOLIBARR_MAIN_DB_USER'] ?? ($_SERVER['DO
 // Examples:
 // $dolibarr_main_db_pass='myadminpass';
 // $dolibarr_main_db_pass='myuserpassword';
+// $dolibarr_main_db_pass=$_SERVER['HTTP_X_DOLIBARR_MAIN_DB_PASS'] ?? ($_SERVER['DOLIBARR_MAIN_DB_PASS'] ?? '');
 //
-$dolibarr_main_db_pass=$_SERVER['HTTP_X_DOLIBARR_MAIN_DB_PASS'] ?? ($_SERVER['DOLIBARR_MAIN_DB_PASS'] ?? '');
+$dolibarr_main_db_pass=getVal('DOLIBARR_MAIN_DB_PASS');
 
 
 // dolibarr_main_db_type
@@ -429,4 +430,16 @@ $dolibarr_cron_allow_cli='0';
 // External modules
 //##############################
 
+function getVal($paramName) 
+{
+    $value = $_SERVER['HTTP_X_'.$paramName] ?? ($_SERVER[$paramName] ?? '');
+    if ($value != "")
+        return $value;
 
+    $valueFile = $_SERVER['HTTP_X_'.$paramName.'_FILE']
+    if ($valueFile && file_exists($valueFile)) {        
+        $value = trim(file_get_contents($valueFile));
+    }
+
+    return $value;
+}
