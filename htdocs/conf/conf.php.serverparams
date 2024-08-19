@@ -430,16 +430,12 @@ $dolibarr_cron_allow_cli='0';
 // External modules
 //##############################
 
-function getVal($paramName) 
-{
+function getVal($paramName) {
     $value = $_SERVER['HTTP_X_'.$paramName] ?? ($_SERVER[$paramName] ?? '');
     if ($value != "")
         return $value;
-
-    $valueFile = $_SERVER['HTTP_X_'.$paramName.'_FILE']
-    if ($valueFile && file_exists($valueFile)) {        
+    $valueFile = $_SERVER['HTTP_X_'.$paramName.'_FILE'];
+    if ($valueFile && file_exists($valueFile))
         $value = trim(file_get_contents($valueFile));
-    }
-
     return $value;
 }
